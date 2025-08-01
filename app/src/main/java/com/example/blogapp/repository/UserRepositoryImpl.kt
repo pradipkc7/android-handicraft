@@ -80,7 +80,7 @@ class UserRepositoryImpl: UserRepository {
     override fun editProfile(
         userId: String,
         data: MutableMap<String, Any>,
-        callBack: (Boolean, String, ) -> Unit
+        callBack: (Boolean, String) -> Unit
     ) {
         ref.child(userId).updateChildren(data).addOnCompleteListener {
             if (it.isSuccessful) {
@@ -113,7 +113,6 @@ class UserRepositoryImpl: UserRepository {
 
             }
 
-
             override fun onCancelled(error: DatabaseError) {
                 callBack(false,error.message,null)
             }
@@ -124,12 +123,18 @@ class UserRepositoryImpl: UserRepository {
     override fun getAllUsers(callBack: (Boolean, String, List<UserModel?>) -> Unit) {
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val users = mutableListOf<UserModel?>()
-                for (userSnapshot in snapshot.children) {
-                    val user = userSnapshot.getValue(UserModel::class.java)
-                    users.add(user)
+                if (snapshot.exists()) {
+                    val allUsers = mutableListOf<UserModel>()
+                    for (eachUser in snapshot.children) {
+                        val user = eachUser.getValue(UserModel::class.java)
+                        if (user != null) {
+                            allUsers.add(user)
+                        }
+                    }
+                    callBack(true, "Users fetched", allUsers)
+                } else {
+                    callBack(true, "No users found", emptyList())
                 }
-                callBack(true, "Users fetched successfully", users)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -155,7 +160,7 @@ class UserRepositoryImpl: UserRepository {
 
         ref.child(userId).removeValue().addOnCompleteListener {
             if (it.isSuccessful) {
-                callBack(true, "User  remove")
+                callBack(true, "User removed")
             }
             else{
                 callBack(false,"${it.exception?.message}")

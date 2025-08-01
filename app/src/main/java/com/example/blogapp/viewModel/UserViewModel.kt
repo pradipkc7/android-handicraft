@@ -14,7 +14,7 @@ class UserViewModel(val repo: UserRepository): ViewModel (){
     //authentication ko function
 //    {
     // "success":true
-    // "message":"register success"
+    // "message":"login success"
     // userid":"shihsujd837663"
 //     status:200}
 
@@ -43,9 +43,6 @@ class UserViewModel(val repo: UserRepository): ViewModel (){
     private val _allUsers = MutableLiveData<List<UserModel?>>()
     val allUsers: LiveData<List<UserModel?>> get() = _allUsers
     
-    private val _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> get() = _loading
-    
     fun getUserFromDatabase(userId: String,
                             callBack:(Boolean, String, UserModel?)-> Unit){ repo.getUserFromDatabase(userId){
                                 success,message,users->
@@ -57,13 +54,10 @@ class UserViewModel(val repo: UserRepository): ViewModel (){
     }}
     
     fun getAllUsers() {
-        _loading.postValue(true)
         repo.getAllUsers { success, message, users ->
             if (success) {
-                _loading.postValue(false)
                 _allUsers.postValue(users)
             } else {
-                _loading.postValue(false)
                 _allUsers.postValue(emptyList())
             }
         }

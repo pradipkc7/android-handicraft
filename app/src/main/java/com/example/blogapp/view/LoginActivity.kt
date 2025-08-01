@@ -57,6 +57,7 @@ import com.example.blogapp.R
 import com.example.blogapp.repository.UserRepositoryImpl
 import com.example.blogapp.ui.theme.BlogAppTheme
 import com.example.blogapp.viewModel.UserViewModel
+import androidx.compose.foundation.BorderStroke
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -191,29 +192,24 @@ fun Login(innerPadding: PaddingValues) {
         // Admin Access Button
         OutlinedButton(
             onClick = {
-                val intent = Intent(context, AdminLoginActivity::class.java)
+                val intent = Intent(context, AdminNavigationActivity::class.java)
                 context.startActivity(intent)
             },
             modifier = Modifier
-                .width(200.dp)
-                .height(50.dp)
-                .padding(10.dp, 0.dp),
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = Color(0xFF8B4513)
             ),
-            border = androidx.compose.foundation.BorderStroke(1.dp, Color(0xFF8B4513))
+            border = BorderStroke(1.dp, Color(0xFF8B4513))
         ) {
             Icon(
-                Icons.Default.Settings,
-                contentDescription = "Admin",
+                Icons.Default.Lock,
+                contentDescription = "Admin Access",
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "Admin Access",
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
-            )
+            Text("Admin Access")
         }
         
         Spacer(modifier = Modifier.height(20.dp))

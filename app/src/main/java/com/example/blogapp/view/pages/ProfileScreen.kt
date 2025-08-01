@@ -22,11 +22,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.blogapp.R
+import androidx.compose.ui.platform.LocalContext
+import android.content.Intent
+import com.example.blogapp.view.LoginActivity
 
 @Composable
 fun ProfileScreen(
     onNavigateToOrders: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+    
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,45 +39,47 @@ fun ProfileScreen(
             .padding(16.dp)
     ) {
         // Profile Header
-        Column(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.craft),
-                contentDescription = "Profile Picture",
+            // Profile Picture
+            Box(
                 modifier = Modifier
-                    .size(100.dp)
-                    .clip(CircleShape)
-                    .clickable { 
-                        // Handle profile picture click
-                        println("Profile picture clicked")
-                    },
-                contentScale = ContentScale.Crop
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = "Sarah Johnson",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Text(
-                text = "sarah.johnson@email.com",
-                fontSize = 14.sp,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = "Member since 2023",
-                fontSize = 12.sp,
-                color = Color.Gray
-            )
+                    .size(80.dp)
+                    .background(Color(0xFF8B4513), CircleShape)
+                    .clickable { },
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "JD",
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            
+            Spacer(modifier = Modifier.width(16.dp))
+            
+            // Profile Info
+            Column {
+                Text(
+                    text = "John Doe",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+                Text(
+                    text = "john.doe@example.com",
+                    fontSize = 14.sp,
+                    color = Color.Gray
+                )
+            }
         }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        // Profile Stats
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        // Statistics
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -87,9 +94,9 @@ fun ProfileScreen(
                 println("Reviews clicked")
             }
         }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
         // Menu Items
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -103,7 +110,12 @@ fun ProfileScreen(
                         "Settings" -> println("Settings clicked")
                         "Help & Support" -> println("Help & Support clicked")
                         "About" -> println("About clicked")
-                        "Logout" -> println("Logout clicked")
+                        "Logout" -> {
+                            println("Logout clicked")
+                            val intent = Intent(context, LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            context.startActivity(intent)
+                        }
                     }
                 }
             }

@@ -28,9 +28,7 @@ import com.example.blogapp.model.CartItem
 import com.example.blogapp.viewModel.CartViewModel
 
 @Composable
-fun CartScreen() {
-    val cartViewModel: CartViewModel = viewModel()
-    
+fun CartScreen(cartViewModel: CartViewModel) {
     val cartItems = cartViewModel.cartItems.observeAsState(initial = emptyList())
     val totalPrice = cartViewModel.totalPrice.observeAsState(initial = 0.0)
 
